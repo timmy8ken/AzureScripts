@@ -22,38 +22,11 @@
         BEGIN {
             
             #Checking the Azure Login
-            $needLogin = $true
+            if ([string]::IsNullOrEmpty($(Get-AzureRmContext).Account)) {
             
-            try {
-
-                $context = Get-AzureRmContext
-                if ($context) {
-
-                    $needLogin = ([string]::IsNullOrEmpty($context.Account))
-
-                }
-
-            } catch {
-
-                if ($_ -like "*Login-AzureRmAccount to login*") {
-
-                    $needLogin = $true
-
-                } else {
-
-                    throw
-
-                }
-
-            }
-
-            if ($needLogin) {
-
                 Login-AzureRmAccount
-
+                
             }
-
-            
 
             Get-AzureRmSubscription
             $subscriptionName = read-host -Prompt "type the subscription name from the list above"
